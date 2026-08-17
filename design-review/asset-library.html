@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SynthCity Asset Library</title>
+    <style>
+      :root { --bg:#101722; --panel:#17212f; --panel-2:#202d3e; --line:#34465d; --ink:#edf4fb; --dim:#9badbd; --live:#75d69b; --visual:#b8c4d2; --r:#70cc7c; --c:#60a6f0; --i:#eeb250; }
+      * { box-sizing:border-box; }
+      body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+      button,input,select { font:inherit; }
+      .top { position:sticky; top:0; z-index:10; padding:15px clamp(16px,3vw,38px); background:color-mix(in srgb,var(--bg) 94%,transparent); border-bottom:1px solid var(--line); backdrop-filter:blur(10px); }
+      .title-row { display:flex; gap:18px; align-items:baseline; flex-wrap:wrap; }
+      h1 { margin:0; font-size:20px; letter-spacing:.015em; }
+      .subtitle { margin:0; color:var(--dim); }
+      .views,.filters { display:flex; gap:7px; flex-wrap:wrap; align-items:center; margin-top:11px; }
+      .view,.control,.load-more,.close { background:var(--panel); border:1px solid var(--line); color:var(--ink); border-radius:7px; padding:6px 10px; cursor:pointer; }
+      .view[aria-pressed="true"] { background:var(--live); border-color:var(--live); color:#102018; font-weight:750; }
+      .control { min-width:110px; }
+      .search { min-width:190px; }
+      .filter-label { color:var(--dim); font-size:11px; letter-spacing:.07em; text-transform:uppercase; font-weight:700; }
+      main { max-width:1660px; margin:auto; padding:19px clamp(16px,3vw,38px) 58px; }
+      .summary { color:var(--dim); margin:0 0 14px; min-height:22px; }
+      .summary strong { color:var(--ink); }
+      #grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(166px,1fr)); gap:10px; }
+      .asset-card { min-width:0; position:relative; border:1px solid var(--line); background:var(--panel); padding:0; color:inherit; text-align:left; border-radius:9px; overflow:hidden; cursor:pointer; }
+      .asset-card:hover,.asset-card:focus-visible { border-color:#8faccc; outline:none; box-shadow:0 0 0 2px #46617d; }
+      .asset-card[data-asset-status="live"] { border-bottom-color:var(--live); }
+      .asset-card[data-asset-status="visual-only"] { border-bottom-color:var(--visual); }
+      .thumbnail { height:148px; display:grid; place-items:center; overflow:hidden; background:#72859d; }
+      .thumbnail img,.thumbnail svg { display:block; width:100%; height:100%; object-fit:contain; }
+      .card-copy { border-top:1px solid var(--line); padding:7px 8px 8px; min-height:58px; }
+      .card-copy b { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12px; }
+      .card-copy span { display:block; color:var(--dim); font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+      .badge,.activation,.zone { position:absolute; border-radius:999px; padding:2px 6px; font-size:9px; font-weight:800; letter-spacing:.06em; }
+      .badge { top:7px; left:7px; background:#101722dd; }
+      .badge.live { color:var(--live); }
+      .badge.visual-only { color:var(--visual); }
+      .activation { right:7px; bottom:65px; background:#101722df; }
+      .activation.active { color:var(--live); }
+      .activation.inactive { color:#f1c47c; }
+      .zone { top:7px; right:7px; color:#111722; background:var(--zone,#c8d0d8); }
+      .empty { color:var(--dim); padding:38px 0; text-align:center; }
+      .pager { display:flex; justify-content:center; padding:22px; }
+      .load-more { border-radius:999px; padding-inline:18px; }
+      .drawer { position:fixed; z-index:20; right:0; top:0; bottom:0; width:min(390px,100%); overflow:auto; pointer-events:none; transform:translateX(105%); transition:transform .18s ease; background:var(--panel-2); border-left:1px solid var(--line); padding:16px; box-shadow:-15px 0 40px #0006; }
+      .drawer.open { transform:translateX(0); pointer-events:auto; }
+      .drawer-head { display:flex; justify-content:space-between; gap:14px; align-items:center; }
+      .drawer h2 { margin:0; font-size:17px; }
+      .close { font-size:19px; padding:1px 8px; }
+      .inspector-thumb { background:#72859d; border-radius:8px; overflow:hidden; margin:14px 0; min-height:220px; display:grid; place-items:center; }
+      .inspector-thumb img,.inspector-thumb svg { max-height:310px; max-width:100%; }
+      .meta { color:var(--dim); margin:7px 0; }
+      .meta strong { color:var(--ink); }
+      .meta ul { margin:6px 0 0; padding-left:20px; }
+      .status-line { display:inline-block; margin:5px 0; color:var(--live); font-weight:800; font-size:11px; letter-spacing:.06em; text-transform:uppercase; }
+      .status-line.visual-only { color:var(--visual); }
+      .activation-action { width:100%; margin:12px 0 5px; background:#29425a; border-color:#6385a6; font-weight:750; }
+      .compare { z-index:19; width:min(318px,100%); }
+      .compare.open { right:min(390px,100%); }
+      .compare-slots { display:grid; gap:13px; }
+      .compare-slot { border:1px solid var(--line); border-radius:8px; padding:8px; min-height:125px; }
+      .compare-slot .inspector-thumb { min-height:105px; margin:0 0 7px; }
+      @media (max-width:760px) { .top { position:static; } .thumbnail { height:126px; } #grid { grid-template-columns:repeat(auto-fill,minmax(138px,1fr)); } .compare { display:none; } }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="title-row"><h1>SynthCity Asset Library</h1><p class="subtitle">The canonical public reference for live and archived city art.</p></div>
+      <nav class="views" aria-label="Asset Library sections">
+        <button class="view" type="button" data-view="live" aria-pressed="true">Live Game</button>
+        <button class="view" type="button" data-view="residential" aria-pressed="false">Residential</button>
+        <button class="view" type="button" data-view="commercial" aria-pressed="false">Commercial</button>
+        <button class="view" type="button" data-view="industrial" aria-pressed="false">Industrial</button>
+        <button class="view" type="button" data-view="civic" aria-pressed="false">Civic</button>
+        <button class="view" type="button" data-view="power-water" aria-pressed="false">Power &amp; Water</button>
+        <button class="view" type="button" data-view="transit-network" aria-pressed="false">Transit &amp; Networks</button>
+        <button class="view" type="button" data-view="waste" aria-pressed="false">Waste</button>
+        <button class="view" type="button" data-view="archive" aria-pressed="false">Archive</button>
+      </nav>
+      <div class="filters">
+        <label class="filter-label">Search <input class="control search" id="search-assets" aria-label="Search assets" placeholder="name, ID, roof…"></label>
+        <label class="filter-label">Zone <select class="control" id="zone-filter" aria-label="Zone family"><option value="">All zones</option></select></label>
+        <label class="filter-label">Height <select class="control" id="height-filter" aria-label="RCI height"><option value="">All heights</option></select></label>
+        <label class="filter-label">Footprint <select class="control" id="footprint-filter" aria-label="RCI footprint"><option value="">All footprints</option></select></label>
+        <label class="filter-label">Roof <select class="control" id="roof-filter" aria-label="RCI roof"><option value="">All roofs</option></select></label>
+        <button class="control" id="compare-button" type="button" aria-pressed="false">Compare</button>
+      </div>
+    </header>
+    <main>
+      <p id="summary" class="summary" aria-live="polite"></p>
+      <section id="grid" aria-label="Asset results"></section>
+      <p id="empty" class="empty" hidden>No assets match those filters.</p>
+      <div id="pager" class="pager"></div>
+    </main>
+    <aside id="inspector" class="drawer" aria-label="Asset inspector" aria-hidden="true"><div class="drawer-head"><h2 id="inspector-title">Asset inspector</h2><button id="close-inspector" class="close" type="button" aria-label="Close asset inspector">×</button></div><div id="inspector-content" class="meta">Choose an asset to inspect its gameplay status and rendering authority.</div></aside>
+    <aside id="compare" class="drawer compare" aria-label="Compare assets" aria-hidden="true"><div class="drawer-head"><h2>Compare assets</h2><button id="close-compare" class="close" type="button" aria-label="Close compare">×</button></div><div class="compare-slots"><section class="compare-slot" id="compare-a">Choose an asset for comparison.</section><section class="compare-slot" id="compare-b">Choose another asset for comparison.</section></div></aside>
+    <script type="module">
+      import { deriveAssetLibraryEntries, deriveAssetLibraryRciVariants, assetLibraryCapabilityText } from '/src/market-city/asset-library.ts';
+      import { activeAssetVisualVariantForSlot, makeAssetVisualVariantLive, onAssetVisualSelectionChange, restoreBuiltInAssetVisualDefault } from '/src/market-city/asset-visuals.ts';
+      import { createCatalogWorldThumbnail } from '@market-city-visual/world-item-renderer';
+      import { createMarketBuildingWorldGeometry } from '@market-city-dashboard/building-renderer';
+
+      const BATCH_SIZE = 72;
+      const zoneNames = { R:'Residential', C:'Commercial', I:'Industrial' };
+      const zoneColors = { R:'var(--r)', C:'var(--c)', I:'var(--i)' };
+      const $ = (selector) => document.querySelector(selector);
+      const grid = $('#grid');
+      const summary = $('#summary');
+      const empty = $('#empty');
+      const pager = $('#pager');
+      const inspector = $('#inspector');
+      const inspectorContent = $('#inspector-content');
+      const inspectorTitle = $('#inspector-title');
+      const compare = $('#compare');
+      const filters = { view:'live', search:'', zone:'', height:'', footprint:'', roof:'', page:1, compare:false, compareTurn:0 };
+      const standardEntries = deriveAssetLibraryEntries();
+      const rciVariants = deriveAssetLibraryRciVariants();
+      const entries = [
+        ...standardEntries.map((entry) => ({ ...entry, source:entry.status, zoneName:entry.zone ? zoneNames[entry.zone] : null })),
+        ...rciVariants.map((entry) => ({ ...entry, source:'live', zoneName:zoneNames[entry.zone] })),
+      ];
+
+      function createSvg(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+      function polygon(points, fill, stroke = 'rgba(49,106,56,.26)') { const node = createSvg('polygon'); node.setAttribute('points', points.map((point) => `${point.x},${point.y}`).join(' ')); node.setAttribute('fill', fill); node.setAttribute('stroke', stroke); node.setAttribute('stroke-width', '.5'); node.setAttribute('vector-effect', 'non-scaling-stroke'); return node; }
+      function lotDimensions(footprint) { return ({ '1x1':{width:1,height:1}, '1x2':{width:2,height:1}, '2x1':{width:1,height:2}, '2x2':{width:2,height:2}, L:{width:2,height:2} })[footprint] || {width:1,height:1}; }
+      function rciThumbnail(entry) {
+        const footprint = lotDimensions(entry.lotFootprint); const cell = 32; const padding = 1;
+        const svg = createSvg('svg'); svg.setAttribute('viewBox','0 0 240 240'); svg.setAttribute('role','img'); svg.setAttribute('aria-label',entry.label); svg.dataset.previewGround = 'asset-library-map-fixture-v1'; svg.dataset.fixtureType = 'rci-lot'; svg.dataset.catalogueRendererAuthority = 'market-rci-svg-v1';
+        const backdrop = createSvg('rect'); backdrop.setAttribute('width','240'); backdrop.setAttribute('height','240'); backdrop.setAttribute('fill','#778aa0'); svg.append(backdrop);
+        const project = (x,y,lift=0) => ({ x:120 + ((x + padding) - (y + padding)) * cell, y:162 + ((x + padding) + (y + padding)) * cell * .5 - lift * cell * .56 });
+        const terrain = createSvg('g'); terrain.setAttribute('class','asset-library-terrain');
+        for (let y = -1; y <= footprint.height; y += 1) for (let x = -1; x <= footprint.width; x += 1) terrain.append(polygon([project(x,y),project(x+1,y),project(x+1,y+1),project(x,y+1)], (x+y)%2 ? '#75a865' : '#80b670'));
+        svg.append(terrain);
+        const color = entry.zone === 'R' ? [112,204,124] : entry.zone === 'C' ? [96,166,240] : [238,178,80];
+        svg.append(createMarketBuildingWorldGeometry({ lot:{ id:entry.id, tileIds:[0], zone:entry.zone, height:entry.height, footprint:entry.lotFootprint, roof:entry.roof, roofHeight:1, roofOrientation:entry.roofOrientation, detail:entry.detail, color, landmark:Boolean(entry.landmark), incidentId:null, fireIntensity:0, fireDamage:0, fireAge:0, char:0, plume:0 }, size:cell, project, data:{ assetLibraryId:entry.id, catalogueRendererAuthority:'market-rci-svg-v1', preview:'asset-library' } }));
+        return svg;
+      }
+      function thumbnail(entry) {
+        if (entry.type === 'rci-system') { const representative = rciVariants.find((variant) => variant.zone === entry.zone && variant.height === 3 && variant.lotFootprint === '1x1') || rciVariants.find((variant) => variant.zone === entry.zone); return rciThumbnail(representative); }
+        if (entry.type === 'rci-variant') return rciThumbnail(entry);
+        const mode = entry.kind === 'water-pipe' || entry.kind === 'subway' ? 'underground' : entry.type === 'network' ? 'network' : entry.type === 'service-zone' ? 'service-zone' : 'surface';
+        return createCatalogWorldThumbnail({ kind:entry.kind, footprint:entry.footprint, mode, label:entry.label, visualVariantId:entry.visualVariantId || '' });
+      }
+      function activationState(entry) { return entry.activationSlot && entry.visualVariantId ? (activeAssetVisualVariantForSlot(entry.activationSlot).id === entry.visualVariantId ? 'active' : 'inactive') : null; }
+      function matchesView(entry) {
+        if (filters.view === 'live') return entry.status === 'live' && entry.type !== 'rci-variant' && (!entry.activationSlot || activationState(entry) === 'active');
+        if (filters.view === 'residential') return entry.zone === 'R';
+        if (filters.view === 'commercial') return entry.zone === 'C';
+        if (filters.view === 'industrial') return entry.zone === 'I';
+        if (filters.view === 'civic') return entry.section === 'civic' || ['health-clinic','school','green-space','playground','neighborhood-park'].includes(entry.kind);
+        if (filters.view === 'power-water' || filters.view === 'transit-network' || filters.view === 'waste') return entry.section === filters.view;
+        return entry.status === 'visual-only';
+      }
+      function matches(entry) {
+        if (!matchesView(entry)) return false;
+        if (filters.zone && entry.zone !== filters.zone) return false;
+        if (filters.height && String(entry.height) !== filters.height) return false;
+        if (filters.footprint && entry.lotFootprint !== filters.footprint) return false;
+        if (filters.roof && entry.roof !== filters.roof) return false;
+        const needle = filters.search.toLocaleLowerCase();
+        return !needle || [entry.id,entry.label,entry.kind,entry.zoneName,entry.roof,entry.lotFootprint].filter(Boolean).join(' ').toLocaleLowerCase().includes(needle);
+      }
+      function statusLabel(status) { return status === 'live' ? 'LIVE' : 'VISUAL ONLY'; }
+      function inspectorMarkup(entry) {
+        const capabilityList = entry.capabilities?.length ? `<ul>${entry.capabilities.map((capability) => `<li>${assetLibraryCapabilityText(capability)}</li>`).join('')}</ul>` : '<p>Reference visual only.</p>';
+        const radius = entry.serviceRadius ? `<p class="meta"><strong>Service radius:</strong> ${entry.serviceRadius} Manhattan tiles</p>` : '';
+        const rci = entry.type === 'rci-variant' ? `<p class="meta"><strong>${entry.zoneName}</strong> · ${entry.height} stories · ${entry.lotFootprint} · ${entry.roof} roof${entry.landmark ? ' · landmark' : ''}</p>` : '';
+        const activation = activationState(entry);
+        const activationCopy = activation ? `<p class="meta"><strong>Visual activation:</strong> ${activation === 'active' ? 'Live now across this browser' : 'Inactive visual alternative'}</p>` : '';
+        const action = activation === 'inactive' ? '<button class="control activation-action" id="make-live" type="button">Make Live</button>' : activation === 'active' && !entry.visualVariantDefault ? '<button class="control activation-action" id="restore-built-in-default" type="button">Restore built-in default</button>' : '';
+        return `<span class="status-line ${entry.status}">${statusLabel(entry.status)}</span><div class="inspector-thumb" id="inspector-thumbnail"></div><p class="meta"><strong>${entry.label}</strong></p><p class="meta">Footprint: <strong>${entry.lotFootprint || `${entry.footprint.width}×${entry.footprint.height}`}</strong></p>${radius}${rci}${activationCopy}${action}<p class="meta"><strong>How it behaves</strong>${capabilityList}</p><p class="meta">Renderer authority: <strong>${entry.authority}</strong></p>`;
+      }
+      function inspect(entry) {
+        inspectorTitle.textContent = entry.label; inspector.dataset.inspectedAssetId = entry.id; inspectorContent.innerHTML = inspectorMarkup(entry); $('#inspector-thumbnail').append(thumbnail(entry)); inspector.classList.add('open'); inspector.setAttribute('aria-hidden','false');
+        $('#make-live')?.addEventListener('click', () => makeAssetVisualVariantLive(entry.visualVariantId));
+        $('#restore-built-in-default')?.addEventListener('click', () => restoreBuiltInAssetVisualDefault(entry.activationSlot));
+        if (filters.compare) addCompare(entry);
+      }
+      function compareMarkup(entry) { const root = document.createElement('div'); root.innerHTML = `<div class="inspector-thumb"></div><strong>${entry.label}</strong><p class="meta">${statusLabel(entry.status)} · ${entry.lotFootprint || `${entry.footprint.width}×${entry.footprint.height}`}</p>`; root.querySelector('.inspector-thumb').append(thumbnail(entry)); return root; }
+      function addCompare(entry) { const target = filters.compareTurn ? $('#compare-b') : $('#compare-a'); target.replaceChildren(compareMarkup(entry)); filters.compareTurn ^= 1; }
+      function card(entry) {
+        const button = document.createElement('button'); button.type = 'button'; button.className = 'asset-card'; button.dataset.assetId = entry.id; button.dataset.assetStatus = entry.status; button.dataset.assetSection = entry.section;
+        const activation = activationState(entry); if (activation) button.dataset.activationState = activation; if (entry.zone) button.dataset.zoneFamily = entry.zone; button.title = entry.label;
+        const thumb = document.createElement('div'); thumb.className = 'thumbnail'; thumb.append(thumbnail(entry)); button.append(thumb);
+        const zone = entry.zone ? `<span class="zone" style="--zone:${zoneColors[entry.zone]}">${entry.zone}</span>` : '';
+        const activationBadge = activation ? `<span class="activation ${activation}">${activation === 'active' ? 'LIVE NOW' : 'INACTIVE'}</span>` : '';
+        button.insertAdjacentHTML('beforeend', `<span class="badge ${entry.status}">${statusLabel(entry.status)}</span>${zone}${activationBadge}<span class="card-copy"><b>${entry.label}</b><span>${entry.type.replaceAll('-',' ')}</span></span>`);
+        button.addEventListener('click', () => inspect(entry)); return button;
+      }
+      function describe(hits) { return filters.view === 'archive' ? `<strong>${hits.length} visual-only artifacts.</strong> These are inspectable but are not player-placeable or simulated.` : `<strong>${hits.length.toLocaleString()} matching assets.</strong> Live cards are derived from the current gameplay catalogue and renderer.`; }
+      function render() { const hits = entries.filter(matches); const shown = hits.slice(0,filters.page * BATCH_SIZE); grid.replaceChildren(...shown.map(card)); empty.hidden = hits.length > 0; summary.innerHTML = describe(hits); pager.replaceChildren(); if (shown.length < hits.length) { const button = document.createElement('button'); button.className = 'load-more'; button.type = 'button'; button.textContent = `Load more (${(hits.length - shown.length).toLocaleString()} remaining)`; button.addEventListener('click', () => { filters.page += 1; render(); }); pager.append(button); } }
+      function resetPage() { filters.page = 1; render(); }
+      function fillFilter(select, values, label) { values.forEach((value) => { const option = document.createElement('option'); option.value = value; option.textContent = label(value); select.append(option); }); }
+      function selectView(view) { filters.view = view; filters.page = 1; document.querySelectorAll('[data-view]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.view === view))); render(); }
+
+      fillFilter($('#zone-filter'), Object.keys(zoneNames), (value) => zoneNames[value]);
+      fillFilter($('#height-filter'), [...new Set(rciVariants.map((entry) => String(entry.height)))], (value) => `${value} stories`);
+      fillFilter($('#footprint-filter'), [...new Set(rciVariants.map((entry) => entry.lotFootprint))], (value) => value);
+      fillFilter($('#roof-filter'), [...new Set(rciVariants.map((entry) => entry.roof))].sort(), (value) => value);
+      document.querySelectorAll('[data-view]').forEach((button) => button.addEventListener('click', () => selectView(button.dataset.view)));
+      $('#search-assets').addEventListener('input', (event) => { filters.search = event.target.value; resetPage(); });
+      $('#zone-filter').addEventListener('change', (event) => { filters.zone = event.target.value; resetPage(); });
+      $('#height-filter').addEventListener('change', (event) => { filters.height = event.target.value; resetPage(); });
+      $('#footprint-filter').addEventListener('change', (event) => { filters.footprint = event.target.value; resetPage(); });
+      $('#roof-filter').addEventListener('change', (event) => { filters.roof = event.target.value; resetPage(); });
+      $('#close-inspector').addEventListener('click', () => { inspector.classList.remove('open'); inspector.setAttribute('aria-hidden','true'); });
+      $('#compare-button').addEventListener('click', () => { filters.compare = !filters.compare; $('#compare-button').setAttribute('aria-pressed',String(filters.compare)); compare.classList.toggle('open',filters.compare); compare.setAttribute('aria-hidden',String(!filters.compare)); });
+      $('#close-compare').addEventListener('click', () => { filters.compare = false; $('#compare-button').setAttribute('aria-pressed','false'); compare.classList.remove('open'); compare.setAttribute('aria-hidden','true'); });
+      onAssetVisualSelectionChange(() => { const openEntry = entries.find((entry) => entry.id === inspector.dataset.inspectedAssetId); render(); if (openEntry) inspect(openEntry); });
+      render();
+    </script>
+  </body>
+</html>

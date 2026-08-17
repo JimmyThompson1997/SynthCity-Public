@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "rulesVersion": "claude-market-2.16.0",
+  "generatedAt": "2026-08-17T08:37:36.053Z",
+  "pass": true,
+  "receipts": [
+    {
+      "id": "01-2x2-one-unit-collapse",
+      "pass": true,
+      "elapsedMs": 69.74262499999999,
+      "finalHash": "market-v2-0a3cf91c",
+      "evidence": {
+        "tileIds": [
+          980,
+          981,
+          1028,
+          1029
+        ],
+        "collapsedTotal": 1
+      }
+    },
+    {
+      "id": "02-rci-ignition-hazard",
+      "pass": true,
+      "elapsedMs": 86.176458,
+      "finalHash": "market-v2-2d077e22",
+      "evidence": {
+        "comparisonMonth": 3862,
+        "draw": 0.00019308901391923428,
+        "probability": {
+          "R": 0.00011999280028796022,
+          "C": 0.00009599539214744102,
+          "I": 0.00028795853198104737
+        },
+        "outcomes": {
+          "R": 0,
+          "C": 0,
+          "I": 1
+        }
+      }
+    },
+    {
+      "id": "03-shared-edge-spread",
+      "pass": true,
+      "elapsedMs": 67.678,
+      "finalHash": "market-v2-b1379564",
+      "evidence": {
+        "comparisonMonth": 33,
+        "oneEdgeIncidents": 1,
+        "twoEdgeIncidents": 2
+      }
+    },
+    {
+      "id": "04-road-firebreak",
+      "pass": true,
+      "elapsedMs": 52.30775,
+      "finalHash": "market-v2-34d860f6",
+      "evidence": {
+        "burning": 490,
+        "road": 491,
+        "target": 492,
+        "comparisonMonth": 21,
+        "targetIgnited": false
+      }
+    },
+    {
+      "id": "05-one-station-slowdown",
+      "pass": true,
+      "elapsedMs": 57.72162499999996,
+      "finalHash": "market-v2-6678699d",
+      "evidence": {
+        "suppression": 0.2863636363636364,
+        "intensity": 0.0596909090909091
+      }
+    },
+    {
+      "id": "06-two-station-suppression",
+      "pass": true,
+      "elapsedMs": 51.608250000000055,
+      "finalHash": "market-v2-ead8dbf5",
+      "evidence": {
+        "suppressedTotal": 1
+      }
+    },
+    {
+      "id": "07-station-road-loss",
+      "pass": true,
+      "elapsedMs": 50.16900000000004,
+      "finalHash": "market-v2-0c7d2867",
+      "evidence": {
+        "before": 0.2863636363636364,
+        "after": 0
+      }
+    },
+    {
+      "id": "08-station-power-dependence",
+      "pass": true,
+      "elapsedMs": 52.234040999999934,
+      "finalHash": "market-v2-edf76244",
+      "evidence": {
+        "powered": 0.2863636363636364,
+        "dark": 0
+      }
+    },
+    {
+      "id": "09-three-fire-station-load",
+      "pass": true,
+      "elapsedMs": 52.34258299999999,
+      "finalHash": "market-v2-6b21c380",
+      "evidence": {
+        "suppression": [
+          0.09545454545454544,
+          0.0909090909090909,
+          0.0818181818181818
+        ]
+      }
+    },
+    {
+      "id": "10-pinned-regroup-pressure",
+      "pass": true,
+      "elapsedMs": 52.082584,
+      "finalHash": "market-v2-ef634e7f",
+      "evidence": {
+        "footprint": "L",
+        "tileIds": [
+          980,
+          1028,
+          1029
+        ]
+      }
+    },
+    {
+      "id": "11-fifty-month-rubble",
+      "pass": true,
+      "elapsedMs": 76.32608300000004,
+      "finalHash": "market-v2-bd79fec3",
+      "evidence": {
+        "finalEvent": {
+          "sequence": 3,
+          "month": 52,
+          "incidentId": "fire-m1-t882",
+          "event": "rubble-cleared",
+          "tileIds": [
+            882
+          ],
+          "zone": "R",
+          "intensity": 0,
+          "damage": 11.5,
+          "rubbleMonthsRemaining": 0
+        }
+      }
+    },
+    {
+      "id": "12-century-fire-history",
+      "pass": true,
+      "elapsedMs": 17430.448125,
+      "finalHash": "market-v2-889d70dc",
+      "evidence": {
+        "historyEntries": 16,
+        "saveBytes": 330291,
+        "incidents": 0
+      }
+    },
+    {
+      "id": "13-difficulty-comparison",
+      "pass": true,
+      "elapsedMs": 68.4798750000009,
+      "finalHash": "market-v2-ac481847",
+      "evidence": {
+        "comparisonMonth": 2466,
+        "probability": {
+          "easy": 0.00012959160228276367,
+          "normal": 0.00028795853198104737,
+          "hard": 0.0007485197192423909
+        },
+        "outcomes": {
+          "easy": 0,
+          "normal": 0,
+          "hard": 1
+        }
+      }
+    },
+    {
+      "id": "14-radius-and-overlap",
+      "pass": true,
+      "elapsedMs": 46.445958000000246,
+      "finalHash": "market-v2-c1288beb",
+      "evidence": {
+        "coveredCells": 925,
+        "overlapCore": 0.5863636363636364
+      }
+    }
+  ]
+}

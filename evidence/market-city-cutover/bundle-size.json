@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "entry": "marketCityDashboard",
+  "maximumInitialGzipBytes": 160000,
+  "currentGzipBytes": 86360,
+  "files": [
+    {
+      "file": "marketCityDashboard-DA11MZbw.css",
+      "rawBytes": 14458,
+      "gzipBytes": 3571
+    },
+    {
+      "file": "marketCityDashboard-VKN8ijXy.js",
+      "rawBytes": 272442,
+      "gzipBytes": 82789
+    }
+  ],
+  "leakedLegacyOutputs": [],
+  "passed": true
+}

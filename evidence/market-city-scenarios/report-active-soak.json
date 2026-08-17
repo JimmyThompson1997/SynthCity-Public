@@ -1,0 +1,618 @@
+{
+  "rulesVersion": "claude-market-2.16.0",
+  "generatedAt": "2026-08-17T08:50:37.775Z",
+  "node": "v24.19.0",
+  "platform": "darwin-arm64",
+  "fullActiveSoak": true,
+  "pass": true,
+  "results": [
+    {
+      "id": "map-fixtures",
+      "pass": true,
+      "elapsedMs": 235.04320900000002,
+      "evidence": [
+        {
+          "id": "flat-48",
+          "hash": "market-v2-0c182d90",
+          "waterTiles": 0,
+          "minimumElevation": 0,
+          "maximumElevation": 0
+        },
+        {
+          "id": "coast-ridge-48",
+          "hash": "market-v2-e3bb439d",
+          "waterTiles": 253,
+          "minimumElevation": -1,
+          "maximumElevation": 9
+        },
+        {
+          "id": "river-blocks-48",
+          "hash": "market-v2-649a3c4e",
+          "waterTiles": 135,
+          "minimumElevation": -1,
+          "maximumElevation": 3
+        },
+        {
+          "id": "dense-core-48",
+          "hash": "market-v2-a00ee9b9",
+          "waterTiles": 0,
+          "minimumElevation": 0,
+          "maximumElevation": 4
+        },
+        {
+          "id": "firebreak-48",
+          "hash": "market-v2-6a74c815",
+          "waterTiles": 0,
+          "minimumElevation": 0,
+          "maximumElevation": 0
+        },
+        {
+          "id": "mixed-energy-48",
+          "hash": "market-v2-15fbf68d",
+          "waterTiles": 0,
+          "minimumElevation": 0,
+          "maximumElevation": 3
+        }
+      ]
+    },
+    {
+      "id": "no-bootstrap",
+      "pass": true,
+      "elapsedMs": 120.40666600000003,
+      "evidence": {
+        "month": 24,
+        "hash": "market-v2-4935e730",
+        "stocks": {
+          "R": 0,
+          "C": 0,
+          "I": 0
+        },
+        "population": 0,
+        "treasury": -1422472,
+        "revenue": 0,
+        "operatingExpense": 59478,
+        "net": -59478,
+        "occupiedLots": 0,
+        "burningLots": 0,
+        "collapsedTotal": 0,
+        "maximumPollution": 0
+      }
+    },
+    {
+      "id": "residential-bootstrap",
+      "pass": true,
+      "elapsedMs": 109.856291,
+      "evidence": {
+        "monthOne": {
+          "month": 1,
+          "hash": "market-v2-d0fa9b5c",
+          "stocks": {
+            "R": 0.5250000000000001,
+            "C": 0,
+            "I": 0
+          },
+          "population": 52.500000000000014,
+          "treasury": -512190.43420634663,
+          "revenue": 6474.565793653381,
+          "operatingExpense": 523665,
+          "net": -517190.43420634663,
+          "occupiedLots": 35,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 0
+        },
+        "monthTwo": {
+          "month": 2,
+          "hash": "market-v2-d2800ba3",
+          "stocks": {
+            "R": 0.91875,
+            "C": 0.1312500000000001,
+            "I": 0.1312500000000001
+          },
+          "population": 91.875,
+          "treasury": -1022483.9655774873,
+          "revenue": 13371.468628859358,
+          "operatingExpense": 523665,
+          "net": -510293.5313711406,
+          "occupiedLots": 95,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 0.02721035306106657
+        }
+      }
+    },
+    {
+      "id": "c-and-i-first",
+      "pass": true,
+      "elapsedMs": 312.184667,
+      "evidence": {
+        "cIdle": {
+          "month": 12,
+          "hash": "market-v2-154f9071",
+          "stocks": {
+            "R": 0,
+            "C": 0,
+            "I": 0
+          },
+          "population": 0,
+          "treasury": -6278980,
+          "revenue": 0,
+          "operatingExpense": 523665,
+          "net": -523665,
+          "occupiedLots": 0,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 0
+        },
+        "iIdle": {
+          "month": 12,
+          "hash": "market-v2-7d628655",
+          "stocks": {
+            "R": 0,
+            "C": 0,
+            "I": 0
+          },
+          "population": 0,
+          "treasury": -6278980,
+          "revenue": 0,
+          "operatingExpense": 523665,
+          "net": -523665,
+          "occupiedLots": 0,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 0
+        },
+        "cActive": {
+          "month": 16,
+          "hash": "market-v2-c60e812e",
+          "stocks": {
+            "R": 1.4728710937500002,
+            "C": 0.55248046875,
+            "I": 0
+          },
+          "population": 147.28710937500003,
+          "treasury": -8311773.985579784,
+          "revenue": 24171.367641733825,
+          "operatingExpense": 523665,
+          "net": -499493.63235826616,
+          "occupiedLots": 65,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 2.9086966352661907
+        },
+        "iActive": {
+          "month": 16,
+          "hash": "market-v2-9b3a0a2a",
+          "stocks": {
+            "R": 1.49953125,
+            "C": 0,
+            "I": 0.55453125
+          },
+          "population": 149.953125,
+          "treasury": -8326755.9567127125,
+          "revenue": 18294.14238906637,
+          "operatingExpense": 523665,
+          "net": -505370.85761093366,
+          "occupiedLots": 65,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 2.973553043737957
+        }
+      }
+    },
+    {
+      "id": "one-coal-equilibrium",
+      "pass": true,
+      "elapsedMs": 3246.647625,
+      "evidence": {
+        "month": 450,
+        "hash": "market-v2-41209439",
+        "stocks": {
+          "R": 39.619506866512594,
+          "C": 39.55766557775457,
+          "I": 39.557665577754555
+        },
+        "population": 3961.9506866512593,
+        "treasury": 321142780.03970635,
+        "revenue": 2977484.8006950757,
+        "operatingExpense": 1360897,
+        "net": 1616587.8006950757,
+        "occupiedLots": 354,
+        "burningLots": 0,
+        "collapsedTotal": 0,
+        "maximumPollution": 100
+      }
+    },
+    {
+      "id": "land-shortage-and-slurp",
+      "pass": true,
+      "elapsedMs": 737.0907079999997,
+      "evidence": {
+        "before": {
+          "month": 180,
+          "hash": "market-v2-2651b4d3",
+          "stocks": {
+            "R": 0.09999999999999998,
+            "C": 0.09999999999999995,
+            "I": 0.09999999999999995
+          },
+          "population": 9.999999999999998,
+          "treasury": -94216142.93541385,
+          "revenue": 230.3962661436669,
+          "operatingExpense": 523665,
+          "net": -523434.60373385635,
+          "occupiedLots": 3,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 10.523809523803642
+        },
+        "after": {
+          "month": 216,
+          "hash": "market-v2-aea88f03",
+          "stocks": {
+            "R": 2.1969801292981694,
+            "C": 0.09999999999999998,
+            "I": 0.09999999999999998
+          },
+          "population": 219.69801292981694,
+          "treasury": -111992752.02122964,
+          "revenue": 38986.92037483429,
+          "operatingExpense": 523665,
+          "net": -484678.07962516573,
+          "occupiedLots": 37,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 10.872363666796927
+        },
+        "releasedTileCount": 34,
+        "newlyOccupied": 34
+      }
+    },
+    {
+      "id": "pollution-relocation",
+      "pass": true,
+      "elapsedMs": 839.8748330000008,
+      "evidence": {
+        "dirtyPollution": 10.79485801227054,
+        "cleanPollution": 10.626313785151327,
+        "dirtyDensity": 0.07197067692340563,
+        "cleanDensity": 0.07202933319827691,
+        "state": {
+          "month": 180,
+          "hash": "market-v2-4b636242",
+          "stocks": {
+            "R": 3.6000002530420647,
+            "C": 0,
+            "I": 2.500000000000001
+          },
+          "population": 360.0000253042065,
+          "treasury": -157937638.75853515,
+          "revenue": 66191.59757646559,
+          "operatingExpense": 938220,
+          "net": -872028.4024235344,
+          "occupiedLots": 75,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 17.969696969685867
+        }
+      }
+    },
+    {
+      "id": "plant-comparison",
+      "pass": true,
+      "elapsedMs": 186.80866699999933,
+      "evidence": [
+        {
+          "kind": "coal-power-plant",
+          "capacity": 1260,
+          "expense": 481427,
+          "pollutionTotal": 6.32561102175733,
+          "plantSitePollution": 0.015417358803986723
+        },
+        {
+          "kind": "gas-power-plant",
+          "capacity": 960,
+          "expense": 653827,
+          "pollutionTotal": 6.143140854800904,
+          "plantSitePollution": 0.010117641715116284
+        },
+        {
+          "kind": "nuclear-power-plant",
+          "capacity": 4860,
+          "expense": 1773996,
+          "pollutionTotal": 5.794788717884089,
+          "plantSitePollution": 0
+        },
+        {
+          "kind": "wind-turbine",
+          "capacity": 60,
+          "expense": 50858,
+          "pollutionTotal": 5.794788717884089,
+          "plantSitePollution": 0
+        },
+        {
+          "kind": "solar-plant",
+          "capacity": 90,
+          "expense": 49565,
+          "pollutionTotal": 5.794788717884089,
+          "plantSitePollution": 0
+        }
+      ]
+    },
+    {
+      "id": "power-severance-and-repair",
+      "pass": true,
+      "elapsedMs": 185.06424999999945,
+      "evidence": {
+        "developed": {
+          "month": 24,
+          "hash": "market-v2-2dcb062c",
+          "stocks": {
+            "R": 1.198795930466936,
+            "C": 0,
+            "I": 0
+          },
+          "population": 119.8795930466936,
+          "treasury": -11403002.66447318,
+          "revenue": 6860.271305726269,
+          "operatingExpense": 480565,
+          "net": -473704.72869427374,
+          "occupiedLots": 12,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 9.989033132145652
+        },
+        "during": {
+          "month": 28,
+          "hash": "market-v2-63b4ad0d",
+          "stocks": {
+            "R": 0,
+            "C": 0,
+            "I": 0
+          },
+          "population": 0,
+          "treasury": -13320111.97404542,
+          "revenue": 0,
+          "operatingExpense": 480134,
+          "net": -480134,
+          "occupiedLots": 0,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 6.230811145776267
+        },
+        "recovered": {
+          "month": 40,
+          "hash": "market-v2-6e10026b",
+          "stocks": {
+            "R": 1.161988377571106,
+            "C": 0,
+            "I": 0
+          },
+          "population": 116.1988377571106,
+          "treasury": -19040278.331951063,
+          "revenue": 5607.9819646977,
+          "operatingExpense": 480565,
+          "net": -474957.0180353023,
+          "occupiedLots": 12,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 6.900474141103876
+        }
+      }
+    },
+    {
+      "id": "seeded-fire-coverage",
+      "pass": true,
+      "elapsedMs": 156.2191670000002,
+      "evidence": {
+        "isolatedCoverage": 0.2727272727272727,
+        "overloadedCoverage": 0.06818181818181818,
+        "isolated": {
+          "month": 13,
+          "hash": "market-v2-ed68b681",
+          "stocks": {
+            "R": 0,
+            "C": 0,
+            "I": 0
+          },
+          "population": 0,
+          "treasury": -7063150.9964157725,
+          "revenue": 0,
+          "operatingExpense": 590652,
+          "net": -590652,
+          "occupiedLots": 0,
+          "burningLots": 0,
+          "collapsedTotal": 1,
+          "maximumPollution": 1.4774058634830467
+        },
+        "overloaded": {
+          "month": 13,
+          "hash": "market-v2-8f6b9667",
+          "stocks": {
+            "R": 0,
+            "C": 0,
+            "I": 0
+          },
+          "population": 0,
+          "treasury": -6998988.51329295,
+          "revenue": 0,
+          "operatingExpense": 590652,
+          "net": -590652,
+          "occupiedLots": 0,
+          "burningLots": 0,
+          "collapsedTotal": 4,
+          "maximumPollution": 2.3074674721892774
+        }
+      }
+    },
+    {
+      "id": "deterministic-checkpoint-hashes",
+      "pass": true,
+      "elapsedMs": 18544.810708,
+      "evidence": [
+        {
+          "month": 0,
+          "hash": "market-v2-3d24349c",
+          "stocks": {
+            "R": 0,
+            "C": 0,
+            "I": 0
+          },
+          "population": 0,
+          "treasury": 5000,
+          "collapsedTotal": 0
+        },
+        {
+          "month": 1,
+          "hash": "market-v2-28d526f1",
+          "stocks": {
+            "R": 0.5249999999999991,
+            "C": 0,
+            "I": 0
+          },
+          "population": 52.499999999999915,
+          "treasury": -1345997.3697647143,
+          "collapsedTotal": 0
+        },
+        {
+          "month": 3,
+          "hash": "market-v2-745ec0be",
+          "stocks": {
+            "R": 1.2454241809787896,
+            "C": 0.32818826865959644,
+            "I": 0.328188268659597
+          },
+          "population": 124.54241809787896,
+          "treasury": -4016096.7958282456,
+          "collapsedTotal": 0
+        },
+        {
+          "month": 12,
+          "hash": "market-v2-56d1fa62",
+          "stocks": {
+            "R": 3.5743115503969114,
+            "C": 2.576384988375224,
+            "I": 2.5763849883752243
+          },
+          "population": 357.43115503969113,
+          "treasury": -15403669.005226102,
+          "collapsedTotal": 0
+        },
+        {
+          "month": 120,
+          "hash": "market-v2-3e8f5ea1",
+          "stocks": {
+            "R": 22.646098649989668,
+            "C": 22.143316186497763,
+            "I": 22.143316186497774
+          },
+          "population": 2264.6098649989667,
+          "treasury": -59332538.07796624,
+          "collapsedTotal": 0
+        },
+        {
+          "month": 300,
+          "hash": "market-v2-71735492",
+          "stocks": {
+            "R": 35.829086284110396,
+            "C": 35.66877611491193,
+            "I": 35.668776114911914
+          },
+          "population": 3582.9086284110394,
+          "treasury": 98375484.72174951,
+          "collapsedTotal": 0
+        },
+        {
+          "month": 900,
+          "hash": "market-v2-c53804b5",
+          "stocks": {
+            "R": 41.863346955935086,
+            "C": 41.85979693504286,
+            "I": 41.85979693504285
+          },
+          "population": 4186.3346955935085,
+          "treasury": 1108928739.1209464,
+          "collapsedTotal": 0
+        },
+        {
+          "month": 1200,
+          "hash": "market-v2-889d70dc",
+          "stocks": {
+            "R": 41.979664529334734,
+            "C": 41.97913624731795,
+            "I": 41.97913624731798
+          },
+          "population": 4197.966452933473,
+          "treasury": 1652374407.2935145,
+          "collapsedTotal": 0
+        }
+      ]
+    },
+    {
+      "id": "1200-month-performance",
+      "pass": true,
+      "elapsedMs": 27432.903375,
+      "evidence": {
+        "sampleCount": 3,
+        "elapsedSamplesMs": [
+          9034.974916999996,
+          9064.206583,
+          9067.505584000006
+        ],
+        "medianElapsedMs": 9064.206583,
+        "slowestElapsedMs": 9067.505584000006,
+        "medianBudgetMs": 10000,
+        "hardCeilingMs": 15000,
+        "summary": {
+          "month": 1200,
+          "hash": "market-v2-889d70dc",
+          "stocks": {
+            "R": 41.979664529334734,
+            "C": 41.97913624731795,
+            "I": 41.97913624731798
+          },
+          "population": 4197.966452933473,
+          "treasury": 1652374407.2935145,
+          "revenue": 3175812.754193568,
+          "operatingExpense": 1360897,
+          "net": 1814915.7541935681,
+          "occupiedLots": 354,
+          "burningLots": 0,
+          "collapsedTotal": 0,
+          "maximumPollution": 100
+        }
+      }
+    },
+    {
+      "id": "10000-month-active-soak",
+      "pass": true,
+      "elapsedMs": 29096.271584000002,
+      "evidence": {
+        "mode": "active-land-shortage-city",
+        "elapsedMs": 29042.989624999995,
+        "heapBefore": 13189656,
+        "heapAfter": 13796344,
+        "heapDelta": 606688,
+        "garbageCollectionAvailable": true,
+        "summary": {
+          "month": 10000,
+          "hash": "market-v2-59d99ec6",
+          "stocks": {
+            "R": 0.09999999999999998,
+            "C": 0.09999999999999995,
+            "I": 0.09999999999999995
+          },
+          "population": 9.999999999999998,
+          "treasury": -5234348903.611354,
+          "revenue": 230.40793685082804,
+          "operatingExpense": 523665,
+          "net": -523434.59206314915,
+          "occupiedLots": 3,
+          "burningLots": 0,
+          "collapsedTotal": 2,
+          "maximumPollution": 10.523809523809518
+        }
+      }
+    }
+  ]
+}

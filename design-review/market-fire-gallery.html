@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SynthCity Building-Unit Fire Gallery</title>
+  <style>
+    :root { color-scheme: light; --ink: #18224f; --line: #6574bd; --paper: #dfe5ff; --ground: #89c975; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 1100px; color: var(--ink); background: radial-gradient(circle at 20% 0, #f5f1d8, transparent 34%), linear-gradient(145deg, #8da0cf, #d8def8 55%, #9aabd7); font: 14px/1.35 Georgia, serif; }
+    header { position: sticky; z-index: 3; top: 0; display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: 18px 24px 14px; border-bottom: 3px solid #3b4d99; background: rgba(227, 233, 255, .94); backdrop-filter: blur(10px); }
+    h1 { margin: 0; font: 800 28px/1.05 Georgia, serif; }
+    header p { max-width: 760px; margin: 0; color: #43518d; }
+    main { padding: 18px 22px 60px; }
+    .gallery-section { margin: 0 0 28px; }
+    .gallery-section h2 { margin: 0 0 10px; font-size: 20px; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(5, minmax(205px, 1fr)); gap: 10px; }
+    .fire-card { overflow: hidden; border: 2px solid var(--line); border-radius: 8px; background: rgba(239, 242, 255, .91); box-shadow: 0 4px 10px rgba(31, 43, 91, .18); }
+    .fire-card header { position: static; display: block; padding: 7px 9px; border: 0; border-bottom: 1px solid #8f9bd0; background: #cbd5fb; backdrop-filter: none; }
+    .fire-card strong { display: block; font-size: 12px; text-transform: uppercase; }
+    .fire-card small { color: #4d5b96; }
+    .fire-card svg { display: block; width: 100%; height: 150px; background: linear-gradient(#8794a2 0 48%, #9ad184 48% 100%); }
+    .gallery-ground { fill: var(--ground); stroke: #4f8a55; stroke-width: 1; }
+    .market-building-flame-tongue { animation: flame .72s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+    .market-building-smoke-puff { animation: smoke 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes flame { 50% { transform: translateY(-1px) scaleY(1.07); } }
+    @keyframes smoke { 50% { transform: translate(1px, -2px) scale(1.03); } }
+    @media (prefers-reduced-motion: reduce) { .market-building-flame-tongue, .market-building-smoke-puff { animation: none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>Building-Unit Fire Gallery</h1><p>Frozen fire stages rendered through the production SVG geometry. Every R/C/I sector, supported merged footprint, and camera quarter-turn appears below.</p></div>
+    <strong id="gallery-count" aria-live="polite">Rendering…</strong>
+  </header>
+  <main id="gallery"></main>
+  <script type="module">
+    import {
+      createMarketBuildingWorldGeometry,
+      createMarketFireSmokeGeometry,
+      createMarketRubbleWorldGeometry,
+    } from '@market-city-dashboard/building-renderer';
+
+    const footprints = ['1x1', '1x2', '2x1', '2x2', 'L'];
+    const sectors = {
+      R: { name: 'Residential', color: [106, 186, 111], roof: 'gable', detail: 'door' },
+      C: { name: 'Commercial', color: [74, 145, 205], roof: 'parapet', detail: 'curtain' },
+      I: { name: 'Industrial', color: [211, 145, 61], roof: 'sawtooth', detail: 'bay' },
+    };
+    const stages = [
+      { id: 'smoke-only', label: 'Smoke only', intensity: .22, age: 2, damage: .25, char: .04 },
+      { id: 'climbing', label: 'Climbing flames', intensity: .5, age: 7, damage: 3.1, char: .28 },
+      { id: 'fully-involved', label: 'Fully involved', intensity: .86, age: 16, damage: 8.7, char: .72 },
+      { id: 'rubble', label: 'Rubble', rubble: true },
+    ];
+    const tileCount = { '1x1': 1, '1x2': 2, '2x1': 2, '2x2': 4, L: 3 };
+    const dimensions = { '1x1': [1, 1], '1x2': [1, 2], '2x1': [2, 1], '2x2': [2, 2], L: [2, 2] };
+    const gallery = document.querySelector('#gallery');
+
+    function projector(footprint, rotation) {
+      const [width, depth] = dimensions[footprint];
+      const centerX = width / 2;
+      const centerY = depth / 2;
+      return (x, y, z = 0) => {
+        let dx = x - centerX;
+        let dy = y - centerY;
+        for (let turn = 0; turn < rotation; turn += 1) [dx, dy] = [dy, -dx];
+        return { x: 110 + (dx - dy) * 37, y: 101 + (dx + dy) * 18 - z * 14 };
+      };
+    }
+
+    function cardFor(zone, footprint, stage, rotation, index) {
+      const card = document.createElement('article');
+      card.className = 'fire-card';
+      card.dataset.zone = zone;
+      card.dataset.footprint = footprint;
+      card.dataset.stage = stage.id;
+      card.dataset.rotation = String(rotation);
+      card.innerHTML = `<header><strong>${sectors[zone].name} · ${footprint}</strong><small>${stage.label} · camera ${rotation * 90}°</small></header>`;
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 220 150');
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', `${sectors[zone].name} ${footprint} ${stage.label}, camera ${rotation * 90} degrees`);
+      const ground = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      ground.setAttribute('class', 'gallery-ground');
+      ground.setAttribute('points', '110,66 202,106 110,146 18,106');
+      svg.append(ground);
+      const project = projector(footprint, rotation);
+      const structure = {
+        footprint,
+        originTile: index,
+        height: 6,
+        roof: sectors[zone].roof,
+        roofHeight: 1,
+        roofOrientation: rotation,
+        detail: sectors[zone].detail,
+        color: sectors[zone].color,
+        landmark: false,
+      };
+      if (stage.rubble) {
+        svg.append(createMarketRubbleWorldGeometry({
+          rubble: { incidentId: `gallery-${index}`, tileIds: Array.from({ length: tileCount[footprint] }, (_, tile) => tile), rubbleMonthsRemaining: 49, structure },
+          project,
+          rotation,
+        }));
+      } else {
+        const lot = {
+          id: `gallery-${index}`, incidentId: `gallery-${index}`,
+          tileIds: Array.from({ length: tileCount[footprint] }, (_, tile) => tile),
+          zone, height: structure.height, footprint, roof: structure.roof,
+          roofHeight: structure.roofHeight, roofOrientation: structure.roofOrientation,
+          detail: structure.detail, color: structure.color, landmark: false,
+          fireIntensity: stage.intensity, fireDamage: stage.damage, fireAge: stage.age,
+          char: stage.char, plume: stage.intensity,
+        };
+        svg.append(createMarketBuildingWorldGeometry({ lot, size: 28, project, rotation }));
+        svg.append(createMarketFireSmokeGeometry({ lot, size: 28, project, phase: .31 }));
+      }
+      card.append(svg);
+      return card;
+    }
+
+    let count = 0;
+    for (const stage of stages) {
+      for (let rotation = 0; rotation < 4; rotation += 1) {
+        const section = document.createElement('section');
+        section.className = 'gallery-section';
+        section.dataset.stage = stage.id;
+        section.dataset.rotation = String(rotation);
+        section.innerHTML = `<h2>${stage.label} · camera ${rotation * 90}°</h2><div class="gallery-grid"></div>`;
+        const grid = section.querySelector('.gallery-grid');
+        for (const zone of Object.keys(sectors)) {
+          for (const footprint of footprints) grid.append(cardFor(zone, footprint, stage, rotation, count++));
+        }
+        gallery.append(section);
+      }
+    }
+    document.querySelector('#gallery-count').textContent = `${count} reference renders`;
+    window.marketFireGallery = { ready: true, count, stages: stages.map(({ id }) => id), footprints, sectors: Object.keys(sectors), rotations: 4 };
+  </script>
+</body>
+</html>

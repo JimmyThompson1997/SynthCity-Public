@@ -1,0 +1,57 @@
+{
+  "name": "synthcity",
+  "version": "0.1.0",
+  "description": "A deterministic, browser-first city-building sandbox.",
+  "private": true,
+  "license": "MIT",
+  "homepage": "https://synth-city.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JimmyThompson1997/SynthCity-Public.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JimmyThompson1997/SynthCity-Public/issues"
+  },
+  "type": "module",
+  "packageManager": "pnpm@11.16.0",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=11.0.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "bundle:check": "tsx scripts/check-market-city-bundle-size.ts",
+    "public:check": "tsx scripts/check-public-repo-readiness.ts",
+    "audit:dependencies": "pnpm audit --audit-level=moderate",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:market": "vitest run tests/market-city tests/market-city-dashboard tests/market-city-scenarios tests/design-review",
+    "scenario:market": "tsx scripts/run-market-city-scenarios.ts",
+    "scenario:waste": "vitest run tests/market-city/waste.test.ts",
+    "scenario:fire": "tsx scripts/run-market-fire-scenarios.ts",
+    "scenario:market:soak": "MARKET_CITY_FULL_SOAK=1 node --expose-gc --import tsx scripts/run-market-city-scenarios.ts",
+    "test:e2e:core": "playwright test tests/e2e/asset-library.spec.ts tests/e2e/market-city-cutover.spec.ts tests/e2e/market-city-visuals.spec.ts tests/e2e/market-city-fire.spec.ts tests/e2e/market-city-water.spec.ts tests/e2e/market-city-waste.spec.ts tests/e2e/market-city-subway.spec.ts tests/e2e/market-city-inspector.spec.ts tests/e2e/public-readiness.spec.ts",
+    "test:e2e:preview-parity": "playwright test tests/e2e/market-city-preview-parity.spec.ts",
+    "test:e2e": "pnpm test:e2e:core && pnpm test:e2e:preview-parity",
+    "test:e2e:production": "playwright test -c playwright.production.config.ts",
+    "test:hosted:core": "test -n \"$PLAYWRIGHT_BASE_URL\" && test -n \"$SYNTHCITY_EXPECTED_COMMIT\" && SYNTHCITY_REQUIRE_PRODUCTION=1 playwright test --workers=1 tests/e2e/asset-library.spec.ts tests/e2e/market-city-cutover.spec.ts tests/e2e/market-city-visuals.spec.ts tests/e2e/market-city-fire.spec.ts tests/e2e/market-city-water.spec.ts tests/e2e/market-city-waste.spec.ts tests/e2e/market-city-subway.spec.ts tests/e2e/market-city-inspector.spec.ts tests/e2e/public-readiness.spec.ts",
+    "test:hosted:preview-parity": "test -n \"$PLAYWRIGHT_BASE_URL\" && test -n \"$SYNTHCITY_EXPECTED_COMMIT\" && SYNTHCITY_REQUIRE_PRODUCTION=1 playwright test --workers=1 tests/e2e/market-city-preview-parity.spec.ts",
+    "test:hosted": "pnpm test:hosted:core && pnpm test:hosted:preview-parity",
+    "evidence:market:browser": "MARKET_CITY_CAPTURE_EVIDENCE=1 pnpm test:e2e",
+    "test:all": "pnpm typecheck && pnpm test && pnpm scenario:market && pnpm scenario:fire && pnpm build && pnpm bundle:check && pnpm test:e2e",
+    "test:release": "pnpm public:check && pnpm audit:dependencies && pnpm typecheck && pnpm test && pnpm scenario:market && pnpm scenario:market:soak && pnpm scenario:fire && pnpm build && pnpm bundle:check && pnpm test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "fast-check": "^4.9.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
+  }
+}

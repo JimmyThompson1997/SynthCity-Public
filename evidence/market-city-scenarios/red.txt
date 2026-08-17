@@ -1,0 +1,24 @@
+
+ RUN  v4.1.10 <local-checkout>
+
+ ❯ tests/market-city-scenarios/scenarios.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/market-city-scenarios/scenarios.test.ts [ tests/market-city-scenarios/scenarios.test.ts ]
+Error: Cannot find module '../../src/market-city/scenarios' imported from <local-checkout>/tests/market-city-scenarios/scenarios.test.ts
+ ❯ tests/market-city-scenarios/scenarios.test.ts:8:1
+      6| import { stepMonth, stepMonths } from '../../src/market-city/simulatio…
+      7| import { derivePower } from '../../src/market-city/spatial';
+      8| import {
+       | ^
+      9|   MARKET_MAP_FIXTURE_IDS,
+     10|   MARKET_SCENARIO_CHECKPOINTS,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  21:58:03
+   Duration  269ms (transform 89ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)

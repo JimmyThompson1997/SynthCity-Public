@@ -1,0 +1,784 @@
+.synthcity-tray {
+  width: 196px;
+  position: absolute;
+  z-index: 11;
+  top: 12px;
+  right: 112px;
+  padding: 7px;
+  border: 2px solid #4b58a8;
+  border-radius: 9px 0 0 9px;
+  background: linear-gradient(135deg, #eef1ff, #aab7f2 68%, #8592df);
+  box-shadow: -4px 3px 10px rgba(28, 36, 91, .35), inset 1px 1px rgba(255, 255, 255, .82);
+  color: #1d286b;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(18px);
+  transition: opacity .14s ease, transform .14s ease;
+}
+
+.synthcity-tray h2 {
+  margin: 0 0 5px;
+  color: #273778;
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.city-client[data-panel="zones"] .zones-tray,
+.city-client[data-panel="transit"] .transit-tray {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+
+.zone-level-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.zone-level-grid button,
+.synthcity-tool {
+  min-width: 0;
+  min-height: 25px;
+  border: 1px solid #5261aa;
+  border-radius: 4px;
+  padding: 3px;
+  background: rgba(245, 247, 255, .72);
+  color: #253477;
+  cursor: pointer;
+  font-size: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.zone-level-grid button {
+  min-height: 29px;
+  padding: 5px 9px;
+  border-color: var(--zone-border);
+  background: linear-gradient(90deg, var(--zone-fill), var(--zone-fill-soft));
+  color: var(--zone-ink);
+  font-size: 9px;
+  text-align: left;
+  text-shadow: 0 1px rgba(255, 255, 255, .45);
+}
+
+.zone-level-grid button:hover { filter: brightness(1.035) saturate(1.06); }
+.zone-level-grid button[data-action="zone-residential"] {
+  --zone-fill: #9bd88f;
+  --zone-fill-soft: #d9f1d1;
+  --zone-border: #4b9660;
+  --zone-ink: #1f4c2a;
+}
+.zone-level-grid button[data-action="zone-commercial"] {
+  --zone-fill: #9bc8e9;
+  --zone-fill-soft: #d8ebf7;
+  --zone-border: #4f81ad;
+  --zone-ink: #1e4266;
+}
+.zone-level-grid button[data-action="zone-industrial"] {
+  --zone-fill: #edc27f;
+  --zone-fill-soft: #f7e4be;
+  --zone-border: #a96d33;
+  --zone-ink: #663d18;
+}
+.zone-level-grid button.selected,
+.synthcity-tool.selected {
+  border-color: #d7bf35;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .72), 0 0 0 1px rgba(215, 191, 53, .72);
+}
+
+.synthcity-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 7px;
+}
+
+.synthcity-tool.danger { color: #7a2929; }
+.synthcity-help {
+  margin: 6px 1px 0;
+  color: #344587;
+  font-size: 8px;
+  line-height: 1.28;
+}
+
+.power-line-button { margin-top: 5px; }
+.power-line-button::before { content: "⌁"; }
+
+.terrain-power-conductor,
+.terrain-power-pole,
+.terrain-power-ground-anchor {
+  pointer-events: none;
+}
+
+.terrain-power-conductor {
+  fill: none;
+  stroke: #f1ca58;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 1px .45px rgba(31, 39, 42, .7));
+}
+
+.terrain-power-sag-conductor { stroke-width: .82; }
+.terrain-power-taut-conductor { stroke-width: .8; }
+
+.terrain-power-pole-shaft {
+  stroke: #74492b;
+  stroke-width: 1.45;
+  vector-effect: non-scaling-stroke;
+}
+
+.terrain-power-pole-crossbar {
+  stroke: #895b34;
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.terrain-power-insulator { fill: #f5cf62; }
+.terrain-power-pole-footing { fill: #684127; }
+
+.terrain-power-ground-anchor-base {
+  fill: #5c422d;
+  stroke: #d2ad4d;
+  stroke-width: .45;
+  vector-effect: non-scaling-stroke;
+}
+
+.terrain-power-ground-anchor-terminal { fill: #f1ca58; }
+
+.terrain-network {
+  fill: none;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.terrain-network-node { vector-effect: non-scaling-stroke; pointer-events: none; }
+
+#underground-network-overlays { display: none; pointer-events: none; }
+.city-client[data-underground-view="water-pipe"] #underground-network-overlays,
+.city-client[data-underground-view="subway"] #underground-network-overlays,
+.city-client[data-underground-view="underground"] #underground-network-overlays { display: block; }
+
+/* Underground is a neutral schematic layer. Keep the world projection and
+   tile grid intact, but remove surface-specific color and decoration so the
+   buried networks are the only visual emphasis. */
+.city-client[data-underground-view] {
+  --underground-slate: #65717d;
+  --underground-slate-grid: rgba(205, 218, 228, .19);
+  --underground-slate-edge: #3b4651;
+}
+.city-client[data-underground-view] .city-map {
+  background: radial-gradient(ellipse at 48% 46%, #53606d, #303a45 74%);
+}
+.city-client[data-underground-view] .city-grid {
+  border-color: var(--underground-slate-edge);
+  background: var(--underground-slate);
+  box-shadow: inset 0 0 0 .5px rgba(255, 255, 255, .12);
+}
+.city-client[data-underground-view] .tile {
+  --terrain-color: var(--underground-slate);
+  --terrain-grid-line: var(--underground-slate-grid);
+  border-right: .45px solid var(--terrain-grid-line);
+  border-bottom: .45px solid var(--terrain-grid-line);
+  background: var(--terrain-color);
+  box-shadow: none;
+  filter: none;
+  opacity: 1;
+}
+.city-client[data-underground-view] .tile::before,
+.city-client[data-underground-view] .tile::after,
+.city-client[data-underground-view] .tile .stack { display: none; }
+.city-client[data-underground-view] .terrain-depth polygon,
+.city-client[data-underground-view] .terrain-elevation polygon {
+  fill: #4b5661;
+  stroke: var(--underground-slate-edge);
+}
+.city-client[data-underground-view] #terrain-surface-facets,
+.city-client[data-underground-view] #terrain-water-banks,
+.city-client[data-underground-view] #terrain-tree-overlays,
+.city-client[data-underground-view] #terrain-construction-overlays,
+.city-client[data-underground-view] .building-sprite-layer { display: none; }
+.underground-network { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.underground-node { vector-effect: non-scaling-stroke; }
+.shared-world-preview .underground-network,
+.shared-world-thumbnail .underground-network { display: block; }
+.shared-world-preview .underground-subway-station-world { display: block; }
+.city-client[data-underground-view="water-pipe"] .underground-subway { display: none; }
+.city-client[data-underground-view="subway"] .underground-water-pipe { display: none; }
+
+/* A pipe run with no source attached carries nothing. Drawn identically to a
+   live one, half a city's plumbing could be inert and look exactly like the
+   half that works, so a dry run is drained of colour and pushed back. */
+.underground-water-pipe[data-water-live="dry"] {
+  opacity: .42;
+  filter: grayscale(.85);
+}
+.underground-water-pipe[data-water-live="live"] {
+  filter: drop-shadow(0 0 2px rgba(96, 186, 255, .55));
+}
+
+.underground-water-source-mark {
+  fill: rgba(120, 214, 255, .5);
+  stroke: rgba(226, 248, 255, .95);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 4px rgba(120, 214, 255, .9));
+}
+/* Demand, not supply: a dark edge reads as a hole in the coverage rather than
+   as another thing emitting water. */
+.underground-unmet-need-outline {
+  fill: none;
+  stroke: rgba(6, 10, 18, .92);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Subway construction stays grounded in the normal city context. While its
+   tunnel or station tool is armed, reveal only the existing buried alignment
+   as a quiet reference; surface buildings, including station entrances, stay
+   fully rendered above it. */
+.city-client[data-city-view="city"][data-underground-alignment="subway"] #underground-network-overlays {
+  display: block;
+  opacity: .42;
+}
+.city-client[data-city-view="city"][data-underground-alignment="subway"] .underground-subway { display: block; }
+.city-client[data-city-view="city"][data-underground-alignment="subway"] .underground-water-pipe,
+.city-client[data-city-view="city"][data-underground-alignment="subway"] .underground-subway-station-world { display: none; }
+
+.city-client[data-city-view="zones"] .building-sprite-layer { opacity: .14; }
+.terrain-surface .terrain-zone {
+  fill: rgba(80, 194, 88, .82);
+  stroke: none;
+}
+.terrain-surface .terrain-zone.commercial {
+  fill: rgba(65, 150, 226, .84);
+}
+.terrain-surface .terrain-zone.industrial {
+  fill: rgba(236, 158, 47, .86);
+}
+.city-client[data-city-view="zones"] .terrain-zone { fill-opacity: .82; }
+
+.ticker > b { overflow: hidden; text-overflow: ellipsis; }
+.date-speed { gap: 7px; }
+.date-speed .step { width: 43px; }
+
+button.demand {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.route-query-panel {
+  width: 265px;
+  max-height: 210px;
+  position: absolute;
+  z-index: 13;
+  left: 12px;
+  top: 12px;
+  overflow: auto;
+  border: 2px solid #4b58a8;
+  border-radius: 7px;
+  padding: 0 8px 8px;
+  background: linear-gradient(135deg, rgba(244, 246, 255, .96), rgba(174, 185, 241, .96));
+  box-shadow: 4px 5px 12px rgba(24, 32, 80, .38);
+  color: #202c70;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.route-query-panel[hidden] { display: none; }
+.route-query-panel header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 -8px 7px;
+  padding: 5px 7px;
+  background: #5c70cb;
+  color: white;
+}
+
+.route-query-panel header button {
+  border: 1px solid #d7defd;
+  background: #9ba9eb;
+  color: #1f2b72;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.synthcity-dialog { width: min(560px, calc(100vw - 160px)); }
+.utility-category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; margin-top: 7px; }
+.transit-category-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; margin-top: 7px; }
+.utility-category-button {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 31px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  border: 2px solid #5261aa;
+  border-radius: 6px;
+  padding: 5px;
+  background: rgba(245, 247, 255, .72);
+  color: #253477;
+  cursor: pointer;
+  text-align: left;
+}
+.transit-category-button {
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 31px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  border: 2px solid #5261aa;
+  border-radius: 6px;
+  padding: 5px;
+  background: rgba(245, 247, 255, .72);
+  color: #253477;
+  cursor: pointer;
+  text-align: left;
+}
+.transit-category-button:hover,
+.transit-category-button:focus-visible { background: linear-gradient(#fff8ad, #dfe6ff); }
+.transit-category-glyph {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid rgba(63, 76, 145, .5);
+  border-radius: 4px;
+  font-size: 19px;
+  font-weight: 900;
+}
+.roads-category .transit-category-glyph { background: linear-gradient(#d9e2e5, #8b969c); color: #3d4a55; }
+.rail-category .transit-category-glyph { background: linear-gradient(#d8d2ea, #81779f); color: #332d47; }
+.transit-category-button strong { display: block; font-size: 10px; line-height: 1.05; text-transform: uppercase; }
+.transit-category-button small { display: block; margin-top: 3px; color: #5363a2; font-size: 8px; font-weight: 800; line-height: 1.15; }
+.utility-category-button:hover,
+.utility-category-button:focus-visible { background: linear-gradient(#fff8ad, #dfe6ff); }
+.utility-category-glyph {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid rgba(63, 76, 145, .5);
+  border-radius: 4px;
+  color: #4a3d16;
+  font-size: 19px;
+  font-weight: 900;
+}
+.power-category .utility-category-glyph { background: linear-gradient(#fff3a6, #e1b73d); }
+.water-category .utility-category-glyph { background: linear-gradient(#c8f3ff, #54a9cf); color: #174968; }
+.utility-category-button strong { display: block; font-size: 9px; line-height: 1.05; text-transform: uppercase; }
+.utility-category-button small { display: block; margin-top: 3px; color: #5363a2; font-size: 6.5px; font-weight: 800; line-height: 1.15; }
+.utility-catalog-dialog { width: min(680px, calc(100vw - 72px)); max-height: min(770px, calc(100vh - 42px)); }
+.utility-catalog-dialog .dialog-body { max-height: calc(min(770px, 100vh - 42px) - 38px); overflow: auto; }
+.utility-catalog-summary { margin: 0 0 13px; color: #303a73; font-size: 13px; line-height: 1.4; }
+.utility-catalog-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.utility-catalog-item {
+  min-width: 0;
+  min-height: 124px;
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border: 2px solid #5261aa;
+  border-radius: 5px;
+  padding: 8px;
+  background: rgba(245, 247, 255, .72);
+  color: #253477;
+  cursor: pointer;
+  text-align: left;
+}
+.transit-catalog-item {
+  min-width: 0;
+  min-height: 124px;
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border: 2px solid #5261aa;
+  border-radius: 5px;
+  padding: 8px;
+  background: rgba(245, 247, 255, .72);
+  color: #253477;
+  cursor: pointer;
+  text-align: left;
+}
+
+.utility-catalog-item:hover,
+.utility-catalog-item:focus-visible,
+.transit-catalog-item:hover,
+.transit-catalog-item:focus-visible { border-color: #d7bf35; background: linear-gradient(#fff8ad, #e0e5ff); }
+.utility-catalog-item:disabled,
+.transit-catalog-item:disabled { cursor: not-allowed; filter: grayscale(.72); opacity: .58; }
+.utility-catalog-preview {
+  width: 130px;
+  height: 94px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #465397;
+  border-radius: 4px;
+  padding: 0;
+  background: #759968;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .48), 1px 2px 3px rgba(33, 45, 99, .22);
+}
+.utility-catalog-preview-svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 1;
+  animation: none;
+}
+.shared-world-preview[data-preview-layout="split"] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 1px;
+  background: #43505a;
+}
+.shared-world-preview[data-preview-layout="split"] .catalog-preview-panel {
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  background: #759968;
+}
+.shared-world-preview[data-preview-layout="split"] .catalog-preview-panel-below {
+  background: #4d5965;
+}
+.shared-world-preview[data-preview-layout="split"] .catalog-preview-panel::after {
+  content: "Surface";
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  left: 2px;
+  padding: 1px 3px;
+  border-radius: 2px;
+  background: rgba(34, 45, 53, .72);
+  color: #f2f5f7;
+  font-size: 6px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.shared-world-preview[data-preview-layout="split"] .catalog-preview-panel-below::after {
+  content: "Below";
+}
+.shared-world-preview[data-preview-layout="split"] .catalog-preview-panel > .utility-catalog-preview-svg {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+.shared-world-preview-compact {
+  width: 48px;
+  height: 34px;
+  grid-row: span 2;
+  align-self: center;
+}
+.utility-catalog-details { min-width: 0; display: grid; align-content: center; gap: 3px; }
+.utility-catalog-details strong { overflow-wrap: anywhere; font-size: 13px; line-height: 1.08; text-transform: uppercase; }
+.utility-catalog-details small { color: #5965a2; font-size: 10px; line-height: 1.15; }
+.utility-catalog-stats,
+.utility-catalog-capabilities { color: #3d4c91; font-size: 10px; line-height: 1.25; }
+.utility-catalog-capabilities { color: #5965a2; }
+.data-view-dialog .dialog-body { max-height: min(620px, calc(100vh - 120px)); overflow: auto; }
+.data-view-option:disabled { cursor: not-allowed; filter: grayscale(.72); opacity: .58; }
+
+.city-client[data-city-view="fire-history"] #market-fire-smoke-overlays,
+.city-client[data-city-view="fire-history"] .market-building-world,
+.city-client[data-city-view="fire-history"] .market-building-rubble {
+  display: none;
+}
+
+.fire-station-coverage-preview,
+.fire-station-placement-pulse,
+.fire-station-selected-radius-outline { pointer-events: none; }
+.fire-station-placement-screen-feedback {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.fire-station-coverage-preview-cell {
+  fill: rgba(218, 76, 71, .13);
+  stroke: none;
+}
+.fire-station-selected-radius-outline-path {
+  fill: none;
+  stroke: rgba(238, 49, 44, .98);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 2px rgba(255, 37, 31, .88));
+}
+
+@keyframes fire-station-placement-wave {
+  0% { opacity: 0; }
+  18% { opacity: .98; }
+  72% { opacity: .56; }
+  100% { opacity: 0; }
+}
+
+.fire-station-placement-pulse-ring {
+  fill: rgba(255, 0, 0, .16);
+  stroke: none;
+  opacity: 0;
+  animation: fire-station-placement-wave .68s ease-out calc(var(--fire-station-ring) * .11s) both;
+}
+
+/* Radius services share the geometry and the animation and differ only in
+   palette, so a player reads "coverage" from the shape and "which service"
+   from the colour. Police is blue against fire's red. */
+[data-station-kind="police-station"] .fire-station-coverage-preview-cell,
+.fire-station-coverage-preview[data-station-kind="police-station"] .fire-station-coverage-preview-cell {
+  fill: rgba(64, 118, 224, .14);
+}
+.fire-station-selected-radius-outline[data-station-kind="police-station"]
+  .fire-station-selected-radius-outline-path {
+  stroke: rgba(58, 122, 246, .98);
+  filter: drop-shadow(0 0 2px rgba(41, 104, 255, .88));
+}
+.fire-station-placement-pulse[data-station-kind="police-station"]
+  .fire-station-placement-pulse-ring {
+  fill: rgba(40, 96, 255, .17);
+}
+.fire-station-placement-flare[data-station-kind="police-station"]
+  .fire-station-placement-flare-glow {
+  stroke: rgba(40, 96, 255, .64);
+  filter: drop-shadow(0 0 4px rgba(40, 96, 255, .92));
+}
+.fire-station-placement-flare[data-station-kind="police-station"]
+  .fire-station-placement-flare-core {
+  stroke: rgba(78, 138, 255, .98);
+  filter: drop-shadow(0 0 2px rgba(78, 138, 255, 1));
+}
+.fire-station-placement-flare[data-station-kind="police-station"]
+  .fire-station-placement-flare-head {
+  fill: rgba(78, 138, 255, .98);
+  stroke: rgba(78, 138, 255, .92);
+}
+
+.fire-station-placement-flare {
+  --fire-station-flare-duration: 480ms;
+  pointer-events: none;
+  overflow: visible;
+  opacity: 0;
+  animation: fire-station-placement-flare-fade var(--fire-station-flare-duration) ease-out both;
+}
+.fire-station-placement-flare-shaft {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 0 1;
+  vector-effect: non-scaling-stroke;
+  path-length: 1;
+  animation: fire-station-placement-flare-shoot var(--fire-station-flare-duration) cubic-bezier(.16,.78,.22,1) both;
+}
+.fire-station-placement-flare-glow {
+  stroke: rgba(255, 0, 0, .64);
+  stroke-width: 8;
+  filter: drop-shadow(0 0 4px rgba(255, 0, 0, .92));
+}
+.fire-station-placement-flare-core {
+  stroke: rgba(255, 0, 0, .98);
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 2px rgba(255, 0, 0, 1));
+}
+.fire-station-placement-flare-head {
+  fill: rgba(255, 0, 0, .98);
+  stroke: rgba(255, 0, 0, .92);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fire-station-placement-flare-head var(--fire-station-flare-duration) ease-out both;
+}
+
+@keyframes fire-station-placement-flare-shoot {
+  0% { stroke-dasharray: .05 .95; }
+  70% { stroke-dasharray: 1 0; }
+  100% { stroke-dasharray: 1 0; }
+}
+
+@keyframes fire-station-placement-flare-fade {
+  0% { opacity: .24; }
+  8% { opacity: 1; }
+  78% { opacity: .84; }
+  100% { opacity: 0; }
+}
+
+@keyframes fire-station-placement-flare-head {
+  0%, 66% { opacity: 0; transform: scale(.2); }
+  76% { opacity: .96; transform: scale(1); }
+  100% { opacity: 0; transform: scale(.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fire-station-placement-pulse-ring {
+    animation: none;
+    opacity: .48;
+  }
+  .fire-station-placement-flare {
+    animation: none;
+    opacity: .52;
+  }
+  .fire-station-placement-flare-shaft {
+    animation: none;
+    stroke-dasharray: 1 0;
+  }
+  .fire-station-placement-flare-head {
+    animation: none;
+    opacity: .55;
+    transform: none;
+  }
+}
+
+.fire-coverage-legend { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 10px; margin-top: 10px; font-size: 10px; color: #293873; }
+.fire-coverage-legend span { display: flex; align-items: center; gap: 6px; }
+.fire-coverage-legend i { width: 16px; height: 12px; border: 1px solid #6c3050; background: transparent; }
+.fire-coverage-legend i[data-strength="weak"] { background: rgba(226, 105, 101, .28); }
+.fire-coverage-legend i[data-strength="covered"] { background: rgba(203, 62, 61, .52); }
+.fire-coverage-legend i[data-strength="overlap"] { background: rgba(130, 24, 39, .76); }
+.fire-history-player { position: absolute; z-index: 44; left: 16px; top: 16px; display: grid; grid-template-columns: auto minmax(190px, 1fr) auto auto auto; align-items: center; gap: 9px; width: min(760px, calc(100% - 170px)); padding: 9px 11px; border: 2px outset #cbd4ff; border-radius: 8px; background: linear-gradient(#edf0ff, #b9c3f1); color: #202c70; box-shadow: 0 4px 11px rgba(25, 35, 86, .28); font-size: 11px; font-weight: 800; }
+.fire-history-player[hidden] { display: none; }
+.fire-history-player label { display: flex; align-items: center; gap: 7px; }
+.fire-history-player input { flex: 1; }
+.synthcity-data-fire-history[data-history-event="ignition"] { fill: #e8a134; }
+.synthcity-data-fire-history[data-history-event="burning"] { fill: #d63c32; }
+.synthcity-data-fire-history[data-history-event="suppression"] { fill: #58a7ce; }
+.synthcity-data-fire-history[data-history-event="collapse"] { fill: #111; }
+.synthcity-data-fire-history[data-history-event="rubble"] { fill: #403936; }
+.rci-matrix { display: grid; grid-template-columns: 1fr; gap: 7px; }
+.rci-cell {
+  min-height: 47px;
+  display: grid;
+  align-content: center;
+  border: 1px solid rgba(69, 82, 158, .34);
+  border-radius: 3px;
+  padding: 4px;
+  background: rgba(255, 255, 255, .32);
+  grid-template-columns: 100px 72px 1fr;
+  gap: 10px;
+  text-align: left;
+}
+.rci-cell strong { font-size: 15px; }
+.rci-cell small { color: #5965a2; font-size: 9px; line-height: 1.35; }
+.rci-cell.positive strong { color: #267146; }
+.rci-cell.negative strong { color: #9a3e3c; }
+.rci-header { min-height: 22px; font-size: 8px; font-weight: 900; text-transform: uppercase; }
+.terrain-surface .synthcity-building-warning { pointer-events: none; filter: drop-shadow(0 1px 1px rgba(25,31,72,.55)); }
+.terrain-surface .synthcity-warning-disc { fill: #fff6cf; stroke: #813535; stroke-width: 1.2; }
+.terrain-surface .synthcity-warning-road { fill: #52596c; stroke: #252b3c; stroke-width: .7; }
+.terrain-surface .synthcity-warning-road-mark { stroke: #fff0a0; stroke-width: .9; stroke-dasharray: 1.4 1; }
+.terrain-surface .synthcity-warning-bolt { fill: #f2c738; stroke: #654b15; stroke-width: .7; }
+.terrain-surface .synthcity-warning-cancel { stroke: #c83c37; stroke-width: 2.1; stroke-linecap: round; }
+.terrain-surface .synthcity-water-warning .synthcity-warning-disc { fill: #d7f6ff; stroke: #285f78; }
+.terrain-surface .synthcity-water-warning .synthcity-warning-drop { fill: #4ba9cf; stroke: #194e68; stroke-width: .7; }
+.terrain-surface .synthcity-data-water-service[data-water-status="not-needed"] { fill: #786b58; }
+.terrain-surface .synthcity-data-water-service[data-water-status="unserved"] { fill: #8f634b; }
+.terrain-surface .synthcity-data-water-service[data-water-status="served"] { fill: #3d96c6; }
+.terrain-surface .synthcity-data-water-service[data-water-status="available"] { fill: #76cceb; }
+.terrain-surface .synthcity-active-fire { pointer-events: none; filter: drop-shadow(0 1px 1px rgba(74, 22, 16, .7)); }
+.terrain-surface .synthcity-fire-flame { fill: #e94f32; stroke: #76251f; stroke-width: 1; }
+.terrain-surface .synthcity-fire-core { fill: #ffd34f; stroke: #a44a1f; stroke-width: .6; }
+
+@media (max-height: 760px) {
+  .zones-tray { max-height: calc(100vh - 130px); overflow: auto; }
+}
+
+@media (max-width: 1040px) {
+  .utility-catalog-dialog { width: min(620px, calc(100vw - 34px)); }
+  .utility-catalog-grid,
+  .transit-catalog-grid { grid-template-columns: 1fr; }
+}
+
+.city-client[data-editor-mode='blocked'] > * {
+  visibility: hidden;
+}
+
+.city-opening-dialog {
+  width: min(660px, calc(100vw - 44px));
+}
+
+.city-opening-lede {
+  margin: 0;
+  color: #34457f;
+  font-size: 14px;
+}
+
+.city-opening-section {
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(62, 79, 155, .28);
+}
+
+.city-opening-section h2 {
+  margin: 0;
+  color: #243875;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.city-opening-section > p {
+  margin: -3px 0 0;
+  color: #5c68a0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.city-opening-profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.city-opening-profile-actions small,
+#city-opening-found-status {
+  color: #5c68a0;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+#city-opening-found-status { min-height: 15px; }
+
+.city-opening-list {
+  display: grid;
+  gap: 8px;
+}
+
+.city-opening-city {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  border: 2px solid #5367b0;
+  border-radius: 5px;
+  padding: 9px 11px;
+  color: #263977;
+  background: rgba(247, 249, 255, .48);
+  text-align: left;
+}
+
+.city-opening-city strong,
+.city-opening-city small { display: block; }
+.city-opening-city strong { font-size: 15px; }
+.city-opening-city small { margin-top: 3px; color: #5c68a0; font-size: 11px; }
+.city-opening-city b { color: #304d91; font-size: 12px; text-transform: uppercase; }
+.city-opening-empty { margin: 0; color: #65709e; font-size: 12px; }

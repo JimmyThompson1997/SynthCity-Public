@@ -1,0 +1,8 @@
+
+ RUN  v4.1.10 <local-checkout>
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  22:11:56
+   Duration  23.61s (transform 107ms, setup 0ms, import 133ms, tests 23.36s, environment 0ms)

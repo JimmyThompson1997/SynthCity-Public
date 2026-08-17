@@ -1,0 +1,40 @@
+name: Feature request
+description: Propose a strategy, gameplay, usability, or visual improvement.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, private saves, personal data, or vulnerability details.
+  - type: textarea
+    id: player_problem
+    attributes:
+      label: Player problem or opportunity
+      description: Describe the decision, friction, or visual result this would improve.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Explain the player interaction and expected city outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Strategy and simulation tradeoffs
+      description: Note effects on balance, determinism, saves, performance, or visual legibility.
+  - type: textarea
+    id: proof
+    attributes:
+      label: Suggested proof
+      description: Describe the tests or screenshots that would demonstrate success.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I removed credentials, private saves, and personal data from this request.
+          required: true

@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+*.glb binary
+*.gif binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+
+public/vendor/** linguist-vendored

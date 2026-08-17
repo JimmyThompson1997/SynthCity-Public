@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0; url=/design-review/square-grid-mayor.html?profile=city" />
+    <meta name="description" content="SynthCity is a deterministic, browser-first city-building sandbox." />
+    <link rel="icon" href="data:," />
+    <title>Opening SynthCity…</title>
+  </head>
+  <body>
+    <p>Opening SynthCity…</p>
+    <script>
+      const destination = new URL('/design-review/square-grid-mayor.html', window.location.origin);
+      const source = new URL(window.location.href);
+      source.searchParams.forEach((value, key) => destination.searchParams.append(key, value));
+      destination.searchParams.set('profile', 'city');
+      destination.hash = source.hash;
+      window.location.replace(destination);
+    </script>
+  </body>
+</html>

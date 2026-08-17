@@ -1,0 +1,100 @@
+name: SynthCity verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: synthcity-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan public history for secrets
+        if: github.repository == 'JimmyThompson1997/SynthCity-Public'
+        shell: bash
+        run: |
+          set -euo pipefail
+          scan_dir="$(mktemp -d)"
+          archive="$scan_dir/gitleaks.tar.gz"
+          curl --fail --silent --show-error --location \
+            --output "$archive" \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $archive" | sha256sum --check --status
+          tar -xzf "$archive" -C "$scan_dir" gitleaks
+          "$scan_dir/gitleaks" git --redact --no-banner .
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@ff378ebe6b225b0680b81c1ad4498ae0d1d3a5e3 # v6.0.10
+        with:
+          version: 11.16.0
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check public repository metadata
+        run: pnpm public:check
+
+      - name: Audit dependencies
+        run: pnpm audit:dependencies
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Run unit and property tests
+        run: pnpm test
+
+      - name: Verify deterministic maps, scenarios, and 1,200-month performance
+        run: pnpm scenario:market
+
+      - name: Run the active 10,000-month deterministic soak
+        run: pnpm scenario:market:soak
+
+      - name: Verify deterministic building-unit fire scenarios
+        run: pnpm scenario:fire
+
+      - name: Build production bundle
+        run: pnpm build
+
+      - name: Check initial bundle size
+        run: pnpm bundle:check
+
+      - name: Run clean-cutover browser and visual acceptance
+        run: MARKET_CITY_CAPTURE_EVIDENCE=1 pnpm test:e2e
+
+      - name: Upload market scenario and browser evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: synthcity-verification-${{ github.sha }}
+          path: |
+            evidence/market-city-scenarios/
+            evidence/market-city-fire-scenarios/
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14
