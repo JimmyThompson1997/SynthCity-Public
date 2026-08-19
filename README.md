@@ -6,6 +6,28 @@ watch as it grows.
 
 [Play the current production build](https://synth-city.vercel.app/design-review/square-grid-mayor.html?profile=city)
 
+![SynthCity city view](docs/images/synthcity-city-view.png)
+
+*Roads, rail, buildings, and utility networks in the current sandbox.*
+
+## Build SynthCity with us
+
+SynthCity is an early open-source city builder, and we want more people shaping
+what it becomes. If you enjoy simulation design, city-builder strategy, browser
+rendering, interface design, visual assets, or testing, there is room for you
+here.
+
+- [Play the game](https://synth-city.vercel.app/design-review/square-grid-mayor.html?profile=city)
+  and share what you notice.
+- Browse [open issues](https://github.com/JimmyThompson1997/SynthCity-Public/issues)
+  or start a focused feature discussion.
+- Read [CONTRIBUTING.md](CONTRIBUTING.md), run the project locally, and open a
+  pull request from your fork.
+
+Small improvements, thoughtful critique, screenshots, and ambitious systems
+ideas are all welcome. SynthCity is being built in public, one city system at a
+time.
+
 The project is open source under the [MIT License](LICENSE). Bundled third-party
 material retains its own license as described in
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
